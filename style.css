@@ -1,0 +1,108 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.body {
+  background-color: #11313d;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.main {
+  margin: 0 auto;
+  margin-top: 10px;
+  padding: 7px;
+}
+
+.heading, .description {
+  color: #fdfdfd;
+  text-align: center;
+  margin: 24px auto;
+}
+
+.description {
+  font-size: 18px;
+}
+
+.textarea {
+  display: block;
+  width: 700px;
+  height: 140px;
+  margin: 40px auto;
+  margin-bottom: 50px;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 18px;
+  overflow-wrap: break-word;
+  box-shadow: 0 0 20px 2px rgb(96, 157, 180, 0.7);
+}
+
+.textarea:focus {
+  outline: none;
+}
+
+.keyboard {
+  display: block;
+  width: 740px;
+  height: 248px;
+  margin: 40px auto;
+  border-radius: 8px;
+  padding: 8px 0;
+  overflow: hidden;
+  background-color: #467e93;
+  box-shadow: 0 0 70px 15px rgb(96, 157, 180, 0.7);
+}
+
+.keyboard__key {
+  float: left;
+  width: 40px;
+  height: 40px;
+  margin-left: 8px;
+  margin-bottom: 8px;
+  text-align: center;
+  line-height: 40px;
+  color: #fdfdfd;
+  background-color: #174251;
+  box-shadow: 2px 3px 3px #609db4;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.5s;
+}
+
+.keyboard__key:hover {
+  background-color: #90becf;
+  box-shadow: 2px 3px 3px #595959;
+}
+
+#Backspace {
+  width: 100px;
+}
+
+#Tab {
+  width: 50px;
+}
+
+#Capslock {
+  width: 100px;
+}
+
+#Enter {
+  width: 86px;
+}
+
+#ShiftLeft {
+  width: 100px;
+}
+
+#ShiftRight {
+  width: 86px;
+}
+
+#MetaLeft {
+  width: 46px;
+}
+
+#Space {
+  width: 332px;
+}
