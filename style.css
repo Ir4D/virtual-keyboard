@@ -52,6 +52,7 @@
   overflow: hidden;
   background-color: #467e93;
   box-shadow: 0 0 70px 15px rgb(96, 157, 180, 0.7);
+  user-select: none;
 }
 
 .keyboard__key {

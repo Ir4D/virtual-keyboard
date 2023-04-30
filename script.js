@@ -490,6 +490,10 @@ const symbols = [
   'Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'IntlBackslash', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'Space', 'ArrowLeft', 'ArrowDown', 'ArrowRight'
 ]
 
+const digits = [
+  'Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'BracketLeft', 'BracketRight', 'Backslash', 'Semicolon', 'Quote', 'IntlBackslash', 'Comma', 'Period', 'Slash', 'ArrowUp', 'Space', 'ArrowLeft', 'ArrowDown', 'ArrowRight'
+]
+
 const letters = [
   'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM'
 ]
@@ -520,19 +524,29 @@ const keyInput = document.querySelectorAll('.key');
 
 for (let k of keyInput) {
   k.onclick = function() {
-    textarea.textContent += k.textContent;
+    textarea.innerHTML += k.innerHTML;
   }
 }
 
 
-function pressSymbol(event) {
+let lettersState = 'normal';
+let digitsState = 'normal';
+
+function pressLetter(event) {
   event.preventDefault();
-  if (symbols.includes(event.code)) {
-    textarea.innerHTML += keys['en'][event.code]['normal'];
+  if (letters.includes(event.code)) {
+    textarea.innerHTML += keys['en'][event.code][lettersState];
   }
 }
+document.addEventListener('keydown', pressLetter);
 
-document.addEventListener('keydown', pressSymbol);
+function pressDigit(event) {
+  event.preventDefault();
+  if (digits.includes(event.code)) {
+    textarea.innerHTML += keys['en'][event.code][digitsState];
+  }
+}
+document.addEventListener('keydown', pressDigit);
 
 
 function pressKey(event) {
@@ -554,14 +568,13 @@ function unpressKey(event) {
     }
   }, 200);
 }
-
 document.addEventListener('keydown', pressKey);
 document.addEventListener('keyup', unpressKey);
 
 
 let toggleCapsLock = false;
 
-function changeCapsLetters(state) {
+function changeLetters(state) {
   for (let i = 0; i < letters.length; i++) {
     let keyShift = document.querySelectorAll('.key');
     for (let k of keyShift) {
@@ -579,22 +592,88 @@ function pressCapsLock(event) {
     let key = document.querySelector('#Capslock');
     key.style.backgroundColor = '#90becf';
     key.style.boxShadow = '2px 3px 3px #595959';
-    changeCapsLetters('shift');
+    if (toggleShift) {
+      lettersState = 'normal';
+      changeLetters(lettersState);
+    } else {
+      lettersState = 'shift';
+      changeLetters(lettersState);
+    }
   }
 }
 
 function unpressCapsLock(event) {
   event.preventDefault();
-  if (event.getModifierState && !event.getModifierState('CapsLock')) {
-    toggleCapsLock = false;
-    let key = document.querySelector('#Capslock');
-    key.style.backgroundColor = '#174251';
-    key.style.boxShadow = '2px 3px 3px #609db4';
-    changeCapsLetters('normal');
+  if (event.key === 'CapsLock') {
+    if (event.getModifierState && !event.getModifierState('CapsLock')) {
+      toggleCapsLock = false;
+      let key = document.querySelector('#Capslock');
+      key.style.backgroundColor = '#174251';
+      key.style.boxShadow = '2px 3px 3px #609db4';
+      lettersState = 'normal';
+      changeLetters(lettersState);
+      if (toggleShift) {
+        lettersState = 'shift';
+        changeLetters(lettersState);
+      } else {
+        lettersState = 'normal';
+        changeLetters(lettersState);
+      }
+    }
   }
 }
-
 document.addEventListener('keydown', pressCapsLock);
 document.addEventListener('keyup', unpressCapsLock);
 
 
+function changeDigits(state) {
+  for (let i = 0; i < digits.length; i++) {
+    let keyShift = document.querySelectorAll('.key');
+    for (let k of keyShift) {
+      if (k.id === digits[i]) {
+        k.innerHTML = keys['en'][digits[i]][state];
+      }
+    }
+  }
+}
+
+let toggleShift = false;
+
+function pressShift(event) {
+  event.preventDefault();
+  if (event.code.includes('Shift') && !event.repeat) {
+    toggleShift = true;
+    if (toggleCapsLock) {
+      digitsState = 'shift';
+      lettersState = 'normal';
+      changeDigits(digitsState);
+      changeLetters(lettersState);
+    } else {
+      digitsState = 'shift';
+      lettersState = 'shift';
+      changeDigits(digitsState);
+      changeLetters(lettersState);
+    }
+  }
+}
+
+function unpressShift(event) {
+  event.preventDefault();
+  if (event.key === 'Shift') {
+    if (!event.shiftKey && toggleCapsLock) {
+      toggleShift = false;
+      digitsState = 'normal';
+      lettersState = 'shift';
+      changeDigits(digitsState);
+      changeLetters(lettersState);
+    } else if (!event.shiftKey) {
+      toggleShift = false;
+      digitsState = 'normal';
+      lettersState = 'normal';
+      changeDigits(digitsState);
+      changeLetters(lettersState);
+    }
+  }
+}
+document.addEventListener('keydown', pressShift);
+document.addEventListener('keyup', unpressShift);
