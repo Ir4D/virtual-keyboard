@@ -80,7 +80,7 @@
 }
 
 #Tab {
-  width: 50px;
+  width: 52px;
 }
 
 #Capslock {
@@ -88,15 +88,15 @@
 }
 
 #Enter {
-  width: 86px;
+  width: 88px;
 }
 
 #ShiftLeft {
-  width: 100px;
+  width: 50px;
 }
 
 #ShiftRight {
-  width: 86px;
+  width: 90px;
 }
 
 #MetaLeft {
@@ -105,4 +105,8 @@
 
 #Space {
   width: 332px;
+}
+
+#ControlRight {
+  width: 42px;
 }

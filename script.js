@@ -26,8 +26,8 @@ main.appendChild(description);
 const keys = {
   'en': {
     'Backquote': {
-      'normal': '`',
-      'shift': '~'
+      'normal': '§',
+      'shift': '±'
     },
     'Digit1': {
       'normal': '1',
@@ -197,6 +197,10 @@ const keys = {
       'normal': 'Shift',
       'shift': 'Shift'
     },
+    'IntlBackslash': {
+      'normal': '`',
+      'shift': '~'
+    },
     'KeyZ': {
       'normal': 'z',
       'shift': 'Z'
@@ -284,8 +288,8 @@ const keys = {
   },
   'ru': {
     'Backquote': {
-      'normal': ']',
-      'shift': '['
+      'normal': '>',
+      'shift': '<'
     },
     'Digit1': {
       'normal': '1',
@@ -431,6 +435,10 @@ const keys = {
       'normal': 'э',
       'shift': 'Э'
     },
+    'IntlBackslash': {
+      'normal': ']',
+      'shift': '['
+    },
     'KeyZ': {
       'normal': 'я',
       'shift': 'Я'
@@ -475,7 +483,11 @@ const keys = {
 };
 
 const keysIds = [
-  'Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace', 'Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'Del', 'Capslock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter', 'ShiftLeft', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'ShiftRight', 'ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ControlRight'
+  'Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace', 'Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'Del', 'Capslock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter', 'ShiftLeft', 'IntlBackslash', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'ShiftRight', 'ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ControlRight'
+]
+
+const symbols = [
+  'Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'IntlBackslash', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'Space', 'ArrowLeft', 'ArrowDown', 'ArrowRight'
 ]
 
 const specials = [
@@ -495,4 +507,23 @@ for (let i = 0; i < keysIds.length; i++) {
   keyboard.appendChild(keyboardKey);
 }
 
+
+let key = document.querySelectorAll('.key');
+
+for (let k of key) {
+  k.onclick = function() {
+    textarea.textContent += k.textContent;
+  }
+}
+
+
+function pressKey(event) {
+  event.preventDefault();
+  console.log(event.code);
+  if (symbols.includes(event.code)) {
+    textarea.innerHTML += keys['en'][event.code]['normal'];
+  }
+}
+
+document.addEventListener('keydown', pressKey);
 
