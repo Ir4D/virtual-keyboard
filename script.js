@@ -143,7 +143,7 @@ const keys = {
       'normal': 'Del',
       'shift': 'Del'
     },
-    'Capslock': {
+    'CapsLock': {
       'normal': 'CapsLock',
       'shift': 'CapsLock'
     },
@@ -529,7 +529,7 @@ const keys = {
 };
 
 const keysIds = [
-  'Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace', 'Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'Del', 'Capslock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter', 'ShiftLeft', 'IntlBackslash', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'ShiftRight', 'ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ControlRight'
+  'Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace', 'Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'Del', 'CapsLock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter', 'ShiftLeft', 'IntlBackslash', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'ShiftRight', 'ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ControlRight'
 ]
 
 const symbols = [
@@ -553,7 +553,7 @@ const lettersRu = [
 ]
 
 const specials = [
-  'Backspace', 'Tab', 'Del', 'Capslock', 'Enter', 'ShiftLeft', 'ShiftRight', 'ControlLeft', 'MetaLeft', 'AltLeft', 'AltRight', 'ControlRight'
+  'Backspace', 'Tab', 'Del', 'CapsLock', 'Enter', 'ShiftLeft', 'ShiftRight', 'ControlLeft', 'MetaLeft', 'AltLeft', 'AltRight', 'ControlRight'
 ];
 
 let digits = digitsEn;
@@ -582,6 +582,22 @@ const keyInput = document.querySelectorAll('.key');
 for (let k of keyInput) {
   k.onclick = function() {
     textarea.innerHTML += k.innerHTML;
+    if (toggleClickShift) {
+      toggleShift = false;
+      if (toggleCapsLock) {
+        toggleShift = false;
+        digitsState = 'normal';
+        lettersState = 'shift';
+        changeDigits(digitsState);
+        changeLetters(lettersState);
+      } else {
+        toggleShift = false;
+        digitsState = 'normal';
+        lettersState = 'normal';
+        changeDigits(digitsState);
+        changeLetters(lettersState);
+      }
+    }
   }
 }
 
@@ -629,12 +645,10 @@ document.addEventListener('keydown', pressKey);
 document.addEventListener('keyup', unpressKey);
 
 
-let toggleCapsLock = false;
-
 function changeLetters(state) {
   for (let i = 0; i < letters.length; i++) {
-    let keyShift = document.querySelectorAll('.key');
-    for (let k of keyShift) {
+    let keyCaps = document.querySelectorAll('.key');
+    for (let k of keyCaps) {
       if (k.id === letters[i]) {
         k.innerHTML = keys[lang][letters[i]][state];
       }
@@ -644,8 +658,8 @@ function changeLetters(state) {
 
 function changeDigits(state) {
   for (let i = 0; i < digits.length; i++) {
-    let keyShift = document.querySelectorAll('.key');
-    for (let k of keyShift) {
+    let keyCaps = document.querySelectorAll('.key');
+    for (let k of keyCaps) {
       if (k.id === digits[i]) {
         k.innerHTML = keys[lang][digits[i]][state];
       }
@@ -653,11 +667,14 @@ function changeDigits(state) {
   }
 }
 
+
+let toggleCapsLock = false;
+
 function pressCapsLock(event) {
   event.preventDefault();
   if (event.getModifierState && event.getModifierState('CapsLock')) {
     toggleCapsLock = true;
-    let key = document.querySelector('#Capslock');
+    let key = document.querySelector('#CapsLock');
     key.style.backgroundColor = '#90becf';
     key.style.boxShadow = '2px 3px 3px #595959';
     if (toggleShift) {
@@ -675,7 +692,7 @@ function unpressCapsLock(event) {
   if (event.key === 'CapsLock') {
     if (event.getModifierState && !event.getModifierState('CapsLock')) {
       toggleCapsLock = false;
-      let key = document.querySelector('#Capslock');
+      let key = document.querySelector('#CapsLock');
       key.style.backgroundColor = '#174251';
       key.style.boxShadow = '2px 3px 3px #609db4';
       lettersState = 'normal';
@@ -692,6 +709,42 @@ function unpressCapsLock(event) {
 }
 document.addEventListener('keydown', pressCapsLock);
 document.addEventListener('keyup', unpressCapsLock);
+
+
+const keyCapsLock = document.querySelector('#CapsLock');
+
+function clickCapsLock(event) {
+  event.preventDefault();
+  if (!toggleCapsLock) {
+    toggleCapsLock = true;
+    let key = document.querySelector('#CapsLock');
+    key.style.backgroundColor = '#90becf';
+    key.style.boxShadow = '2px 3px 3px #595959';
+    if (toggleShift) {
+      lettersState = 'normal';
+      changeLetters(lettersState);
+    } else {
+      lettersState = 'shift';
+      changeLetters(lettersState);
+    }
+  } else {
+    toggleCapsLock = false;
+    let key = document.querySelector('#CapsLock');
+    key.style.backgroundColor = '#174251';
+    key.style.boxShadow = '2px 3px 3px #609db4';
+    lettersState = 'normal';
+    changeLetters(lettersState);
+    if (toggleShift) {
+      lettersState = 'shift';
+      changeLetters(lettersState);
+    } else {
+      lettersState = 'normal';
+      changeLetters(lettersState);
+    }
+  }
+}
+
+keyCapsLock.addEventListener('click', clickCapsLock);
 
 
 let toggleShift = false;
@@ -736,7 +789,51 @@ document.addEventListener('keydown', pressShift);
 document.addEventListener('keyup', unpressShift);
 
 
-function changeLang(event) {
+const keyShiftLeft = document.querySelector('#ShiftLeft');
+const keyShiftRight = document.querySelector('#ShiftRight');
+let toggleClickShift = false;
+
+function clickShift(event) {
+  event.preventDefault();
+  if (!toggleShift) {
+    toggleShift = true;
+    toggleClickShift = true;
+    if (toggleCapsLock) {
+      digitsState = 'shift';
+      lettersState = 'normal';
+      changeDigits(digitsState);
+      changeLetters(lettersState);
+    } else {
+      digitsState = 'shift';
+      lettersState = 'shift';
+      changeDigits(digitsState);
+      changeLetters(lettersState);
+    }
+  } else {
+    toggleShift = false;
+    if (toggleCapsLock) {
+      toggleShift = false;
+      digitsState = 'normal';
+      lettersState = 'shift';
+      changeDigits(digitsState);
+      changeLetters(lettersState);
+    } else {
+      toggleShift = false;
+      digitsState = 'normal';
+      lettersState = 'normal';
+      changeDigits(digitsState);
+      changeLetters(lettersState);
+    }
+  }
+}
+
+keyShiftLeft.addEventListener('mousedown', clickShift);
+keyShiftRight.addEventListener('mousedown', clickShift);
+keyShiftLeft.addEventListener('mouseup', clickShift);
+keyShiftRight.addEventListener('mouseup', clickShift);
+
+
+document.addEventListener('keydown', (event) => {
   if (event.code == 'AltLeft' && event.ctrlKey) {
     if (lang === 'en') {
       lang = 'ru';
@@ -750,5 +847,4 @@ function changeLang(event) {
     changeLetters(lettersState);
     changeDigits(digitsState);
   }
-}
-document.addEventListener('keydown', changeLang);
+});
