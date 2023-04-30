@@ -490,40 +490,111 @@ const symbols = [
   'Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'IntlBackslash', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'Space', 'ArrowLeft', 'ArrowDown', 'ArrowRight'
 ]
 
+const letters = [
+  'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM'
+]
+
 const specials = [
   'Backspace', 'Tab', 'Del', 'Capslock', 'Enter', 'ShiftLeft', 'ShiftRight', 'ControlLeft', 'MetaLeft', 'AltLeft', 'AltRight', 'ControlRight'
 ];
 
-for (let i = 0; i < keysIds.length; i++) {
-  let keyboardKey = document.createElement('div');
-  keyboardKey.className = 'keyboard__key';
-  if (specials.includes(keysIds[i])) {
-    keyboardKey.classList.add('special');
-  } else {
-    keyboardKey.classList.add('key');
+function initKeyboard() {
+  for (let i = 0; i < keysIds.length; i++) {
+    let keyboardKey = document.createElement('div');
+    keyboardKey.className = 'keyboard__key';
+    if (specials.includes(keysIds[i])) {
+      keyboardKey.classList.add('special');
+    } else {
+      keyboardKey.classList.add('key');
+    }
+    keyboardKey.id = keysIds[i];
+    keyboardKey.innerHTML = keys['en'][keysIds[i]]['normal'];
+    keyboard.appendChild(keyboardKey);
   }
-  keyboardKey.id = keysIds[i];
-  keyboardKey.innerHTML = keys['en'][keysIds[i]]['normal'];
-  keyboard.appendChild(keyboardKey);
 }
 
+initKeyboard();
 
-let key = document.querySelectorAll('.key');
 
-for (let k of key) {
+const keyInput = document.querySelectorAll('.key');
+
+for (let k of keyInput) {
   k.onclick = function() {
     textarea.textContent += k.textContent;
   }
 }
 
 
-function pressKey(event) {
+function pressSymbol(event) {
   event.preventDefault();
-  console.log(event.code);
   if (symbols.includes(event.code)) {
     textarea.innerHTML += keys['en'][event.code]['normal'];
   }
 }
 
+document.addEventListener('keydown', pressSymbol);
+
+
+function pressKey(event) {
+  event.preventDefault();
+  if (keysIds.includes(event.code)) {
+    let key = document.querySelector(`#${event.code}`);
+    key.style.backgroundColor = '#90becf';
+    key.style.boxShadow = '2px 3px 3px #595959';
+  }
+}
+
+function unpressKey(event) {
+  setTimeout(function() {   
+    event.preventDefault();
+    if (keysIds.includes(event.code)) {
+      let key = document.querySelector(`#${event.code}`);
+      key.style.backgroundColor = '#174251';
+      key.style.boxShadow = '2px 3px 3px #609db4';
+    }
+  }, 200);
+}
+
 document.addEventListener('keydown', pressKey);
+document.addEventListener('keyup', unpressKey);
+
+
+let toggleCapsLock = false;
+
+function changeCapsLetters(state) {
+  for (let i = 0; i < letters.length; i++) {
+    let keyShift = document.querySelectorAll('.key');
+    for (let k of keyShift) {
+      if (k.id === letters[i]) {
+        k.innerHTML = keys['en'][letters[i]][state];
+      }
+    }
+  }
+}
+
+function pressCapsLock(event) {
+  event.preventDefault();
+  if (event.getModifierState && event.getModifierState('CapsLock')) {
+    toggleCapsLock = true;
+    let key = document.querySelector('#Capslock');
+    key.style.backgroundColor = '#90becf';
+    key.style.boxShadow = '2px 3px 3px #595959';
+    changeCapsLetters('shift');
+  }
+}
+
+function unpressCapsLock(event) {
+  event.preventDefault();
+  if (event.getModifierState && !event.getModifierState('CapsLock')) {
+    toggleCapsLock = false;
+    let key = document.querySelector('#Capslock');
+    key.style.backgroundColor = '#174251';
+    key.style.boxShadow = '2px 3px 3px #609db4';
+    changeCapsLetters('normal');
+  }
+}
+
+document.addEventListener('keydown', pressCapsLock);
+document.addEventListener('keyup', unpressCapsLock);
+
 
