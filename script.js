@@ -23,6 +23,8 @@ main.appendChild(textarea);
 main.appendChild(keyboard);
 main.appendChild(description);
 
+let lang = 'en';
+
 const keys = {
   'en': {
     'Backquote': {
@@ -284,7 +286,7 @@ const keys = {
     'ControlRight': {
       'normal': 'Ctrl',
       'shift': 'Ctrl'
-    },
+    }
   },
   'ru': {
     'Backquote': {
@@ -478,6 +480,50 @@ const keys = {
     'Slash': {
       'normal': '/',
       'shift': '?'
+    },
+    'ArrowUp': {
+      'normal': `&uarr;`,
+      'shift': `&uarr;`
+    },
+    'ShiftRight': {
+      'normal': 'Shift',
+      'shift': 'Shift'
+    },
+    'ControlLeft': {
+      'normal': 'Ctrl',
+      'shift': 'Ctrl'
+    },
+    'MetaLeft': {
+      'normal': 'Cmd',
+      'shift': 'Cmd'
+    },
+    'AltLeft': {
+      'normal': 'Alt',
+      'shift': 'Alt'
+    },
+    'Space': {
+      'normal': ' ',
+      'shift': ' '
+    },
+    'AltRight': {
+      'normal': 'Alt',
+      'shift': 'Alt'
+    },
+    'ArrowLeft': {
+      'normal': `&larr;`,
+      'shift': `&larr;`
+    },
+    'ArrowDown': {
+      'normal': `&darr;`,
+      'shift': `&darr;`
+    },
+    'ArrowRight': {
+      'normal': `&rarr;`,
+      'shift': `&rarr;`
+    },
+    'ControlRight': {
+      'normal': 'Ctrl',
+      'shift': 'Ctrl'
     }
   }
 };
@@ -490,17 +536,28 @@ const symbols = [
   'Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'IntlBackslash', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'Space', 'ArrowLeft', 'ArrowDown', 'ArrowRight'
 ]
 
-const digits = [
+const digitsEn = [
   'Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'BracketLeft', 'BracketRight', 'Backslash', 'Semicolon', 'Quote', 'IntlBackslash', 'Comma', 'Period', 'Slash', 'ArrowUp', 'Space', 'ArrowLeft', 'ArrowDown', 'ArrowRight'
 ]
 
-const letters = [
+const digitsRu = [
+  'Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'IntlBackslash', 'Slash', 'ArrowUp', 'Space', 'ArrowLeft', 'ArrowDown', 'ArrowRight'
+]
+
+const lettersEn = [
   'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM'
+]
+
+const lettersRu = [
+  'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period'
 ]
 
 const specials = [
   'Backspace', 'Tab', 'Del', 'Capslock', 'Enter', 'ShiftLeft', 'ShiftRight', 'ControlLeft', 'MetaLeft', 'AltLeft', 'AltRight', 'ControlRight'
 ];
+
+let digits = digitsEn;
+let letters = lettersEn;
 
 function initKeyboard() {
   for (let i = 0; i < keysIds.length; i++) {
@@ -512,7 +569,7 @@ function initKeyboard() {
       keyboardKey.classList.add('key');
     }
     keyboardKey.id = keysIds[i];
-    keyboardKey.innerHTML = keys['en'][keysIds[i]]['normal'];
+    keyboardKey.innerHTML = keys[lang][keysIds[i]]['normal'];
     keyboard.appendChild(keyboardKey);
   }
 }
@@ -535,7 +592,7 @@ let digitsState = 'normal';
 function pressLetter(event) {
   event.preventDefault();
   if (letters.includes(event.code)) {
-    textarea.innerHTML += keys['en'][event.code][lettersState];
+    textarea.innerHTML += keys[lang][event.code][lettersState];
   }
 }
 document.addEventListener('keydown', pressLetter);
@@ -543,7 +600,7 @@ document.addEventListener('keydown', pressLetter);
 function pressDigit(event) {
   event.preventDefault();
   if (digits.includes(event.code)) {
-    textarea.innerHTML += keys['en'][event.code][digitsState];
+    textarea.innerHTML += keys[lang][event.code][digitsState];
   }
 }
 document.addEventListener('keydown', pressDigit);
@@ -579,7 +636,18 @@ function changeLetters(state) {
     let keyShift = document.querySelectorAll('.key');
     for (let k of keyShift) {
       if (k.id === letters[i]) {
-        k.innerHTML = keys['en'][letters[i]][state];
+        k.innerHTML = keys[lang][letters[i]][state];
+      }
+    }
+  }
+}
+
+function changeDigits(state) {
+  for (let i = 0; i < digits.length; i++) {
+    let keyShift = document.querySelectorAll('.key');
+    for (let k of keyShift) {
+      if (k.id === digits[i]) {
+        k.innerHTML = keys[lang][digits[i]][state];
       }
     }
   }
@@ -626,17 +694,6 @@ document.addEventListener('keydown', pressCapsLock);
 document.addEventListener('keyup', unpressCapsLock);
 
 
-function changeDigits(state) {
-  for (let i = 0; i < digits.length; i++) {
-    let keyShift = document.querySelectorAll('.key');
-    for (let k of keyShift) {
-      if (k.id === digits[i]) {
-        k.innerHTML = keys['en'][digits[i]][state];
-      }
-    }
-  }
-}
-
 let toggleShift = false;
 
 function pressShift(event) {
@@ -677,3 +734,21 @@ function unpressShift(event) {
 }
 document.addEventListener('keydown', pressShift);
 document.addEventListener('keyup', unpressShift);
+
+
+function changeLang(event) {
+  if (event.code == 'AltLeft' && event.ctrlKey) {
+    if (lang === 'en') {
+      lang = 'ru';
+      digits = digitsRu;
+      letters = lettersRu;
+    } else if (lang === 'ru') {
+      lang = 'en';
+      digits = digitsEn;
+      letters = lettersEn;
+    }
+    changeLetters(lettersState);
+    changeDigits(digitsState);
+  }
+}
+document.addEventListener('keydown', changeLang);
