@@ -611,7 +611,7 @@ textarea.addEventListener('click', () => {
 
 for (let k of keyInput) {
   k.onclick = function() {
-    textarea.value = textarea.value.slice(0, keyPosition) + k.innerHTML + textarea.value.slice(keyPosition, textarea.value.length);
+    textarea.value = textarea.value.slice(0, keyPosition) + k.innerText + textarea.value.slice(keyPosition, textarea.value.length);
     keyPosition = keyPosition + 1;
     textarea.setSelectionRange(keyPosition, keyPosition);
     if (toggleClickShift) {
@@ -651,7 +651,7 @@ document.addEventListener('keydown', pressLetter);
 function pressDigit(event) {
   event.preventDefault();
   if (digits.includes(event.code)) {
-    let keyNew = keys[lang][event.code][lettersState];
+    let keyNew = keys[lang][event.code][digitsState];
     textarea.value = textarea.value.slice(0, keyPosition) + keyNew + textarea.value.slice(keyPosition, textarea.value.length);
     keyPosition = keyPosition + 1;
     textarea.setSelectionRange(keyPosition, keyPosition);
@@ -885,7 +885,6 @@ document.addEventListener('keydown', (event) => {
     }
     changeLetters(lettersState);
     changeDigits(digitsState);
-    setLocalStorage();
   }
 });
 
