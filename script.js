@@ -244,8 +244,8 @@ const keys = {
       'shift': '?'
     },
     'ArrowUp': {
-      'normal': `&uarr;`,
-      'shift': `&uarr;`
+      'normal': '↑',
+      'shift': '↑'
     },
     'ShiftRight': {
       'normal': 'Shift',
@@ -272,16 +272,16 @@ const keys = {
       'shift': 'Alt'
     },
     'ArrowLeft': {
-      'normal': `&larr;`,
-      'shift': `&larr;`
+      'normal': '←',
+      'shift': '←'
     },
     'ArrowDown': {
-      'normal': `&darr;`,
-      'shift': `&darr;`
+      'normal': '↓',
+      'shift': '↓'
     },
     'ArrowRight': {
-      'normal': `&rarr;`,
-      'shift': `&rarr;`
+      'normal': '→',
+      'shift': '→'
     },
     'ControlRight': {
       'normal': 'Ctrl',
@@ -482,8 +482,8 @@ const keys = {
       'shift': '?'
     },
     'ArrowUp': {
-      'normal': `&uarr;`,
-      'shift': `&uarr;`
+      'normal': '↑',
+      'shift': '↑'
     },
     'ShiftRight': {
       'normal': 'Shift',
@@ -510,16 +510,16 @@ const keys = {
       'shift': 'Alt'
     },
     'ArrowLeft': {
-      'normal': `&larr;`,
-      'shift': `&larr;`
+      'normal': '←',
+      'shift': '←'
     },
     'ArrowDown': {
-      'normal': `&darr;`,
-      'shift': `&darr;`
+      'normal': '↓',
+      'shift': '↓'
     },
     'ArrowRight': {
-      'normal': `&rarr;`,
-      'shift': `&rarr;`
+      'normal': '→',
+      'shift': '→'
     },
     'ControlRight': {
       'normal': 'Ctrl',
@@ -578,10 +578,17 @@ initKeyboard();
 
 
 const keyInput = document.querySelectorAll('.key');
+let keyPosition = textarea.selectionStart;
+
+textarea.addEventListener('click', () => {
+  keyPosition = textarea.selectionStart;
+})
 
 for (let k of keyInput) {
   k.onclick = function() {
-    textarea.innerHTML += k.innerHTML;
+    textarea.value = textarea.value.slice(0, keyPosition) + k.innerHTML + textarea.value.slice(keyPosition, textarea.value.length);
+    keyPosition = keyPosition + 1;
+    textarea.setSelectionRange(keyPosition, keyPosition);
     if (toggleClickShift) {
       toggleShift = false;
       if (toggleCapsLock) {
@@ -608,7 +615,10 @@ let digitsState = 'normal';
 function pressLetter(event) {
   event.preventDefault();
   if (letters.includes(event.code)) {
-    textarea.innerHTML += keys[lang][event.code][lettersState];
+    let keyNew = keys[lang][event.code][lettersState];
+    textarea.value = textarea.value.slice(0, keyPosition) + keyNew + textarea.value.slice(keyPosition, textarea.value.length);
+    keyPosition = keyPosition + 1;
+    textarea.setSelectionRange(keyPosition, keyPosition);
   }
 }
 document.addEventListener('keydown', pressLetter);
@@ -616,7 +626,10 @@ document.addEventListener('keydown', pressLetter);
 function pressDigit(event) {
   event.preventDefault();
   if (digits.includes(event.code)) {
-    textarea.innerHTML += keys[lang][event.code][digitsState];
+    let keyNew = keys[lang][event.code][lettersState];
+    textarea.value = textarea.value.slice(0, keyPosition) + keyNew + textarea.value.slice(keyPosition, textarea.value.length);
+    keyPosition = keyPosition + 1;
+    textarea.setSelectionRange(keyPosition, keyPosition);
   }
 }
 document.addEventListener('keydown', pressDigit);
@@ -834,6 +847,7 @@ keyShiftRight.addEventListener('mouseup', clickShift);
 
 
 document.addEventListener('keydown', (event) => {
+  event.preventDefault();
   if (event.code == 'AltLeft' && event.ctrlKey) {
     if (lang === 'en') {
       lang = 'ru';
@@ -848,3 +862,88 @@ document.addEventListener('keydown', (event) => {
     changeDigits(digitsState);
   }
 });
+
+
+const keyTab = document.querySelector('#Tab');
+
+keyTab.addEventListener('click', () => {
+  textarea.value = textarea.value.slice(0, keyPosition) + '    ' + textarea.value.slice(keyPosition, textarea.value.length);
+  keyPosition = keyPosition + 4;
+  textarea.setSelectionRange(keyPosition, keyPosition);
+});
+
+document.addEventListener('keydown', (event) => {
+  event.preventDefault();
+  if (event.code == 'Tab') {
+    textarea.value = textarea.value.slice(0, keyPosition) + '    ' + textarea.value.slice(keyPosition, textarea.value.length);
+    keyPosition = keyPosition + 4;
+    textarea.setSelectionRange(keyPosition, keyPosition);
+  }
+});
+
+
+const keyEnter = document.querySelector('#Enter');
+
+keyEnter.addEventListener('click', () => {
+  textarea.value = textarea.value.slice(0, keyPosition) + '\n' + textarea.value.slice(keyPosition, textarea.value.length);
+  keyPosition = keyPosition + 1;
+  textarea.setSelectionRange(keyPosition, keyPosition);
+});
+
+document.addEventListener('keydown', (event) => {
+  event.preventDefault();
+  if (event.code == 'Enter') {
+    textarea.value = textarea.value.slice(0, keyPosition) + '\n' + textarea.value.slice(keyPosition, textarea.value.length);
+    keyPosition = keyPosition + 1;
+    textarea.setSelectionRange(keyPosition, keyPosition);
+  }
+});
+
+
+const keyBackspace = document.querySelector('#Backspace');
+
+keyBackspace.addEventListener('click', () => {
+  if (textarea.selectionStart !== 0) {
+    keyPosition = textarea.selectionStart;
+    textarea.value = textarea.value.slice(0, keyPosition - 1) + textarea.value.slice(keyPosition, textarea.value.length);
+    textarea.selectionStart = keyPosition - 1;
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  event.preventDefault();
+  if (event.code == 'Backspace') {
+    if (textarea.selectionStart !== 0) {
+      keyPosition = textarea.selectionStart;
+      textarea.value = textarea.value.slice(0, keyPosition - 1) + textarea.value.slice(keyPosition, textarea.value.length);
+      textarea.selectionStart = keyPosition - 1;
+    }
+  }
+});
+
+
+const keyDel = document.querySelector('#Del');
+
+keyDel.addEventListener('click', () => {
+  if (textarea.selectionStart !== textarea.value.length) {
+    keyPosition = textarea.selectionStart;
+    textarea.value = textarea.value.slice(0, keyPosition) + textarea.value.slice(keyPosition + 1, textarea.value.length);
+    textarea.selectionStart = keyPosition;
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  event.preventDefault();
+  if (event.code == 'Del') {
+    if (textarea.selectionStart !== textarea.value.length) {
+      keyPosition = textarea.selectionStart;
+      textarea.value = textarea.value.slice(0, keyPosition) + textarea.value.slice(keyPosition + 1, textarea.value.length);
+      textarea.selectionStart = keyPosition;
+    }
+  }
+});
+
+textarea.focus();
+textarea.onblur = function() {
+  textarea.focus();
+};
