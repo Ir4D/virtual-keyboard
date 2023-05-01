@@ -23,7 +23,7 @@ main.appendChild(textarea);
 main.appendChild(keyboard);
 main.appendChild(description);
 
-let lang = 'en';
+let lang = localStorage.getItem('lang') || 'en';
 
 const keys = {
   en: {
@@ -602,6 +602,11 @@ let toggleCapsLock = false;
 
 let lettersState = 'normal';
 let digitsState = 'normal';
+
+function setLocalStorage() {
+  localStorage.setItem('lang', lang);
+}
+window.addEventListener('beforeunload', setLocalStorage);
 
 function changeLetters(state) {
   for (let i = 0; i < letters.length; i += 1) {
