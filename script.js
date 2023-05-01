@@ -341,6 +341,14 @@ const keys = {
       'normal': '=',
       'shift': '+'
     },
+    'Backspace': {
+      'normal': 'Backspace',
+      'shift': 'Backspace'
+    },
+    'Tab': {
+      'normal': 'Tab',
+      'shift': 'Tab'
+    },
     'KeyQ': {
       'normal': 'й',
       'shift': 'Й'
@@ -393,6 +401,14 @@ const keys = {
       'normal': 'ё',
       'shift': 'Ё'
     },
+    'Del': {
+      'normal': 'Del',
+      'shift': 'Del'
+    },
+    'CapsLock': {
+      'normal': 'CapsLock',
+      'shift': 'CapsLock'
+    },
     'KeyA': {
       'normal': 'ф',
       'shift': 'Ф'
@@ -436,6 +452,14 @@ const keys = {
     'Quote': {
       'normal': 'э',
       'shift': 'Э'
+    },
+    'Enter': {
+      'normal': 'Enter',
+      'shift': 'Enter'
+    },
+    'ShiftLeft': {
+      'normal': 'Shift',
+      'shift': 'Shift'
     },
     'IntlBackslash': {
       'normal': ']',
@@ -558,6 +582,7 @@ const specials = [
 
 let digits = digitsEn;
 let letters = lettersEn;
+
 
 function initKeyboard() {
   for (let i = 0; i < keysIds.length; i++) {
@@ -860,6 +885,7 @@ document.addEventListener('keydown', (event) => {
     }
     changeLetters(lettersState);
     changeDigits(digitsState);
+    setLocalStorage();
   }
 });
 
