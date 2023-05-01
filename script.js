@@ -644,7 +644,7 @@ function clickKey(event) {
     keyPos += 1;
     textarea.setSelectionRange(keyPos, keyPos);
     if (toggleClickShift) {
-      toggleShift = false;
+      toggleClickShift = false;
       if (toggleCapsLock) {
         toggleShift = false;
         digitsState = 'normal';
@@ -661,7 +661,6 @@ function clickKey(event) {
     }
   }
 }
-
 document.addEventListener('click', clickKey);
 
 function pressLetter(event) {
@@ -692,8 +691,7 @@ function pressKey(event) {
   event.preventDefault();
   if (keysIds.includes(event.code)) {
     const key = document.querySelector(`#${event.code}`);
-    key.style.backgroundColor = '#90becf';
-    key.style.boxShadow = '2px 3px 3px #595959';
+    key.classList.add('click');
   }
 }
 
@@ -702,8 +700,7 @@ function unpressKey(event) {
     event.preventDefault();
     if (keysIds.includes(event.code)) {
       const key = document.querySelector(`#${event.code}`);
-      key.style.backgroundColor = '#174251';
-      key.style.boxShadow = '2px 3px 3px #609db4';
+      key.classList.remove('click');
     }
   }, 200);
 }
@@ -715,8 +712,7 @@ function pressCapsLock(event) {
   if (event.getModifierState && event.getModifierState('CapsLock')) {
     toggleCapsLock = true;
     const key = document.querySelector('#CapsLock');
-    key.style.backgroundColor = '#90becf';
-    key.style.boxShadow = '2px 3px 3px #595959';
+    key.classList.add('click');
     if (toggleShift) {
       lettersState = 'normal';
       changeLetters(lettersState);
@@ -733,8 +729,7 @@ function unpressCapsLock(event) {
     if (event.getModifierState && !event.getModifierState('CapsLock')) {
       toggleCapsLock = false;
       const key = document.querySelector('#CapsLock');
-      key.style.backgroundColor = '#174251';
-      key.style.boxShadow = '2px 3px 3px #609db4';
+      key.classList.remove('click');
       lettersState = 'normal';
       changeLetters(lettersState);
       if (toggleShift) {
@@ -757,8 +752,7 @@ function clickCapsLock(event) {
   if (!toggleCapsLock) {
     toggleCapsLock = true;
     const key = document.querySelector('#CapsLock');
-    key.style.backgroundColor = '#90becf';
-    key.style.boxShadow = '2px 3px 3px #595959';
+    key.classList.add('click');
     if (toggleShift) {
       lettersState = 'normal';
       changeLetters(lettersState);
@@ -769,8 +763,7 @@ function clickCapsLock(event) {
   } else {
     toggleCapsLock = false;
     const key = document.querySelector('#CapsLock');
-    key.style.backgroundColor = '#174251';
-    key.style.boxShadow = '2px 3px 3px #609db4';
+    key.classList.remove('click');
     lettersState = 'normal';
     changeLetters(lettersState);
     if (toggleShift) {
@@ -782,7 +775,6 @@ function clickCapsLock(event) {
     }
   }
 }
-
 keyCapsLock.addEventListener('click', clickCapsLock);
 
 function pressShift(event) {
@@ -845,6 +837,7 @@ function clickShift(event) {
     }
   } else {
     toggleShift = false;
+    toggleClickShift = false;
     if (toggleCapsLock) {
       toggleShift = false;
       digitsState = 'normal';
@@ -969,8 +962,6 @@ const keySpace = document.querySelector('#Space');
 
 keySpace.addEventListener('click', () => {
   textarea.value = `${textarea.value.slice(0, keyPos)} ${textarea.value.slice(keyPos, textarea.value.length)}`;
-  keyPos += 1;
-  textarea.setSelectionRange(keyPos, keyPos);
 });
 
 textarea.focus();

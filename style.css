@@ -68,12 +68,23 @@
   box-shadow: 2px 3px 3px #609db4;
   border-radius: 5px;
   cursor: pointer;
-  transition: all 0.5s;
+  transition: all 0.3s;
 }
 
 .keyboard__key:hover {
-  background-color: #90becf;
+  background-color: #65a1b7;
   box-shadow: 2px 3px 3px #595959;
+}
+
+.keyboard__key:active {
+  background-color: #1fc7b9;
+  box-shadow: 2px 3px 3px #343434;
+}
+
+.click {
+  background-color: #1fc7b9;
+  box-shadow: 2px 3px 3px #343434;
+  transition: all 0.5s ease;
 }
 
 #Backspace {
